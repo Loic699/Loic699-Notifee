@@ -23,8 +23,9 @@ export const Content: React.FC<Props> = () => {
     await notifee.createChannel({
       id: notification.android?.channelId || 'default',
       name: notification.android?.channelId || 'default',
-      importance: notification.android?.importance || AndroidImportance.DEFAULT,
-      visibility: notification.android?.visibility || AndroidVisibility.PRIVATE,
+      // importance: notification.android?.importance || AndroidImportance.DEFAULT,
+      importance: AndroidImportance.HIGH,
+      // visibility: notification.android?.visibility || AndroidVisibility.PRIVATE,
       vibration: true,
       sound: notification.android?.sound || 'default',
     });
@@ -70,7 +71,7 @@ export const Content: React.FC<Props> = () => {
       <View style={styles.content}>
         <View style={styles.contentItem}>
           <View style={styles.contentItemText}>
-            <Text>{`Notification: ${notification.title}`}</Text>
+            <Text>{`Notification:`}</Text>
           </View>
           <View style={[styles.button]}>
             <Button

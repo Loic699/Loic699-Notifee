@@ -1,10 +1,13 @@
 import {
   AndroidCategory,
+  AndroidColor,
   AndroidImportance,
   AndroidStyle,
   AndroidVisibility,
   Notification,
 } from '@notifee/react-native';
+
+const image = require('../../assets/AtempoRond.png');
 
 type NotificationItems = {
   basic: Notification;
@@ -15,10 +18,18 @@ type NotificationItems = {
 
 export const notifications: NotificationItems = {
   basic: {
-    title: 'Basic',
-    body: 'notification',
+    
+    title: '<p style="color:purple;">Un nouveau programme est disponible !!</p>',
+    body: '<p style="color:purple;"> Venez vite le découvrir maintenant :)</p>',
     android: {
+      largeIcon: require('../../assets/AtempoRond.png'),
+      // smallIcon: 'AtempoRond',
+      // smallIcon: "ic_launcher",
       channelId: 'default',
+      importance: AndroidImportance.HIGH,
+      // color: AndroidColor.PURPLE,
+      style: { type: AndroidStyle.BIGPICTURE, picture: require('../../assets/AtempoBaseline.png') },
+ 
       pressAction: {
         id: 'default',
       },
@@ -32,6 +43,7 @@ export const notifications: NotificationItems = {
     body: 'notification',
     android: {
       channelId: 'default',
+      importance: AndroidImportance.HIGH,
       pressAction: {
         id: 'default',
       },
