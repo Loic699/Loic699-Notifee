@@ -9,7 +9,8 @@ import notifee, {
 import CalendarPicker from 'react-native-calendar-picker';
 import {notifications} from './utils/notifications';
 import {triggers} from './utils/triggers';
-import moment from "moment";
+import moment from 'moment';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 
 export const Dating = () => {
@@ -18,6 +19,20 @@ export const Dating = () => {
     const [time, setTime] = useState("06:00")
     const [selectedStartDate, setSelectedStartDate] = useState(null);
     const [selectedEndDate, setSelectedEndDate] = useState(null);
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+      };
+    
+      const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+      };
+    
+      const handleConfirm = (date) => {
+        console.warn("A date has been picked: ", date);
+        hideDatePicker();
+      };
   
     const onDateChange = (date, type) => {
       //function to handle the date change
@@ -64,12 +79,12 @@ export const Dating = () => {
               previousTitle="Previous"
               nextTitle="Next"
               todayBackgroundColor="#e6ffe6"
-              selectedDayColor="#66ff33"
+              selectedDayColor="#44306a"
               selectedDayTextColor="#000000"
               scaleFactor={375}
               textStyle={{
                 fontFamily: 'Cochin',
-                color: '#000000',
+                color: '#44306a',
               }}
               onDateChange={onDateChange}
               />
@@ -86,12 +101,22 @@ export const Dating = () => {
             <Text style={styles.textStyle}>
               {selectedEndDate ? selectedEndDate.toString() : ''}
             </Text>
-            <TextInput 
+            <Button title="Show Date Picker" onPress={showDatePicker} />
+            <DateTimePickerModal
+            
+            isVisible={isDatePickerVisible}
+            mode="time"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+            
+            />
+            {/* <TextInput 
             // style={styles.timeInp} 
                 keyboardType={"numeric"} 
                 value={time} 
-                onChangeText={(time) => setTime(time)} />
-            <TextInput placeholder={"Choisissez une heure de rappel"} />
+                // onChangeText={(time) => setTime(time)}
+                 />
+            <TextInput placeholder={"Choisissez une heure de rappel"} /> */}
             </View>
       </View>
       </ScrollView>
