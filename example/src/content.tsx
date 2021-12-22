@@ -1,16 +1,23 @@
-import React from 'react';
-import {View, Button, StyleSheet, Text, Platform} from 'react-native';
+/* eslint-disable prettier/prettier */
+import React, { useState } from 'react';
+import {View, Button, StyleSheet, Text, Platform, ScrollView, TextInput} from 'react-native';
+import {Card, Input} from 'react-native-elements';
 import notifee, {
   AndroidImportance,
   AndroidVisibility,
 } from '@notifee/react-native';
-
+import CalendarPicker from 'react-native-calendar-picker';
 import {notifications} from './utils/notifications';
 import {triggers} from './utils/triggers';
 
+
+
 type Props = {};
 
-export const Content: React.FC<Props> = () => {
+
+
+// : React.FC<Props>  
+export const Content = ({navigation} : any) => {
   /* Change the notification payload */
   const notification = notifications.basic;
 
@@ -66,14 +73,33 @@ export const Content: React.FC<Props> = () => {
     console.log('onAPIPress -> ', result != null ? result : 'API Call Success');
   };
 
+  const seances= [
+    {
+      name: 'relaxation',
+      avatar: '',
+    },
+  ];
+
   return (
+    <ScrollView>
     <View style={styles.container}>
+      <Card>
+        <Card.Title>Séance</Card.Title>
+        <Card.Divider />
+        <Card.FeaturedTitle>Relaxation</Card.FeaturedTitle>
+        <Button
+              color={(Platform.OS === 'ios' && '#fff') || '#44337A'}
+              title={'Display Notification'}
+              onPress={()=>navigation.navigate('dating')}
+            />
+      </Card>
       <View style={styles.content}>
         <View style={styles.contentItem}>
           <View style={styles.contentItemText}>
             <Text>{`Notification:`}</Text>
           </View>
           <View style={[styles.button]}>
+        </View>
             <Button
               color={(Platform.OS === 'ios' && '#fff') || '#44337A'}
               title={'Display Notification'}
@@ -103,7 +129,7 @@ export const Content: React.FC<Props> = () => {
           </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -113,12 +139,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 0.6,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     backgroundColor: '#F5FCFF',
     marginTop: 50,
   },
+  textStyle: {
+    marginTop: 10,
+  },
   content: {
-    justifyContent: 'space-evenly',
+    // justifyContent: 'space-evenly',
     flex: 0.5,
   },
   contentItem: {

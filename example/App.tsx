@@ -12,8 +12,13 @@ import notifee, {
   EventType,
   IOSAuthorizationStatus,
 } from '@notifee/react-native';
-import {Content} from './src/content';
+import content, {Content} from './src/content';
+import {Dating} from './src/Dating';
 import {categories} from './src/utils/categories';
+// import {NavigationContainer} from 'react-navigation';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+// import  Dating  from './src/Dating';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -21,6 +26,8 @@ const instructions = Platform.select({
     'Double tap R on your keyboard to reload,\n' +
     'Shake or press menu button for dev menu',
 });
+
+const Stack = createNativeStackNavigator();
 
 notifee.onBackgroundEvent(async ({type, detail}) => {
   const {notification, pressAction} = detail;
@@ -102,14 +109,20 @@ function App() {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <NavigationContainer>
+    <Stack.Navigator>
+       <Stack.Screen name="content" component={Content} />
+      <Stack.Screen name="dating" component={Dating} />
+    {/* <View style={styles.container}>
       <Text style={styles.welcome}>Notifee Demo</Text>
       <Text style={styles.instructions}>To get started, edit content.tsx</Text>
       <Text style={styles.instructions}>{instructions}</Text>
       <Text style={styles.instructions}>Notifee Version</Text>
       <Text style={styles.instructions}>{notifee.SDK_VERSION}</Text>
       <Content />
-    </View>
+    </View> */}
+    </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
