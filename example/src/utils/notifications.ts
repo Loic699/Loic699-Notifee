@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   AndroidCategory,
   AndroidColor,
@@ -24,9 +25,13 @@ export const notifications: NotificationItems = {
     android: {
       largeIcon: require('../../assets/AtempoRond.png'),
       // smallIcon: 'AtempoRond',
-      // smallIcon: "ic_launcher",
+      smallIcon: "ic_atempo",
       channelId: 'default',
       importance: AndroidImportance.HIGH,
+      chronometerDirection: 'down',
+      timestamp: Date.now() + 240000,
+      showTimestamp: true,
+      showChronometer: true,
       // color: AndroidColor.PURPLE,
       style: { type: AndroidStyle.BIGPICTURE, picture: require('../../assets/AtempoBaseline.png') },
  

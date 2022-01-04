@@ -1,3 +1,6 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
@@ -6,7 +9,7 @@
  * @flow
  */
 
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {AppRegistry, Platform, StyleSheet, Text, View} from 'react-native';
 import notifee, {
   EventType,
@@ -17,8 +20,13 @@ import {Dating} from './src/Dating';
 import {categories} from './src/utils/categories';
 // import {NavigationContainer} from 'react-navigation';
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createStackNavigator} from '@react-navigation/stack';
 // import  Dating  from './src/Dating';
+import { useRoute, useNavigation } from '@react-navigation/native';
+import ContextDate from './src/context/DateContext';
+import {HeaderLeft} from './src/headerLeft';
+import { Button } from 'react-native-elements';
+import { HeaderBackButton } from 'react-navigation-stack';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -27,7 +35,7 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 notifee.onBackgroundEvent(async ({type, detail}) => {
   const {notification, pressAction} = detail;
@@ -48,7 +56,8 @@ notifee.onBackgroundEvent(async ({type, detail}) => {
   }
 });
 
-function App() {
+function App({}) {
+  
   const requestUserPermission = async () => {
     const settings = await notifee.requestPermission();
 
@@ -107,12 +116,56 @@ function App() {
       await requestUserPermission();
     })();
   }, []);
-
+  const [time, setTime] = useState("06:00")
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [selectedEndDate, setSelectedEndDate] = useState(null);
+ 
+  const config = {
+    animation: 'spring',
+    config: {
+      stiffness: 1000,
+      damping: 500,
+      mass: 3,
+      overshootClamping: true,
+      restDisplacementThreshold: 0.01,
+      restSpeedThreshold: 0.01,
+    },
+  };
+  const navigationOptions = ({ navigation } :any) => {
+    return {
+    headerLeft: <HeaderBackButton onPress={() => navigation.navigate('dating')} />,
+  }
+}
+// function navigationOptions (navigation) {
+//    navigation.navigate('dating');
+// }
+  // const goBack = () => navigation.navigate('dating');
+//  const navigation = useNavigation();
   return (
+    <ContextDate.Provider value={time, setTime}>
     <NavigationContainer>
     <Stack.Navigator>
        <Stack.Screen name="content" component={Content} />
       <Stack.Screen name="dating" component={Dating} />
+      <Stack.Screen name="header" component={HeaderLeft} 
+      // options={{ headerTintColor: '#412D68', headerTitle:"", headerTransparent: true, headerBackTitle: 'Retour',  }}
+      // options={{ header: () => null}}
+      options={{
+      //   headerLeft: (navigation) => (
+      //   // eslint-disable-next-line react/jsx-no-undef
+      //   // <HeaderBackButton
+          
+      //   //   // onPress={() => {
+      //   //   //   navigation.navigate('dating');
+      //   //   //   // Do something
+      //   //   // }}
+      //   //   onPress={() => navigationOptions}
+          
+      //   // />
+      //   // navigationOptions
+      // ),
+      headerTintColor: '#412D68', headerTitle:"Retour", headerTransparent: true, headerBackTitle: 'RETOUUUUUR',}}
+      />
     {/* <View style={styles.container}>
       <Text style={styles.welcome}>Notifee Demo</Text>
       <Text style={styles.instructions}>To get started, edit content.tsx</Text>
@@ -123,6 +176,7 @@ function App() {
     </View> */}
     </Stack.Navigator>
     </NavigationContainer>
+    </ContextDate.Provider>
   );
 }
 

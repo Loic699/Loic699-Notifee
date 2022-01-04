@@ -1,14 +1,17 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {View, Button, StyleSheet, Text, Platform, ScrollView, TextInput} from 'react-native';
 import {Card, Input} from 'react-native-elements';
 import notifee, {
   AndroidImportance,
   AndroidVisibility,
+  TimestampTrigger,
+  TriggerType,
 } from '@notifee/react-native';
 import CalendarPicker from 'react-native-calendar-picker';
 import {notifications} from './utils/notifications';
 import {triggers} from './utils/triggers';
+import ContextDate from './context/DateContext';
 
 
 
@@ -20,7 +23,7 @@ type Props = {};
 export const Content = ({navigation} : any) => {
   /* Change the notification payload */
   const notification = notifications.basic;
-
+  const {time, setTime} = useContext(ContextDate);
   /* Change the trigger type */
   const triggerType = triggers.timestamp;
 
@@ -46,6 +49,9 @@ export const Content = ({navigation} : any) => {
 
   const onTriggerNotificationPress = async () => {
     await notifee.deleteChannel(notification.android?.channelId || 'default');
+    // const date = new Date(Date.now());
+    // date.setHours(17);
+    // date.setMinutes(19);
     // Create a channel
     await notifee.createChannel({
       id: notification.android?.channelId || 'default',
@@ -62,9 +68,44 @@ export const Content = ({navigation} : any) => {
     /* Change the trigger */
     const trigger = triggerType();
 
-    await notifee.createTriggerNotification(notification, trigger);
+    await notifee.createTriggerNotification( notification,
+    trigger );
     console.log('Trigger created: ', notification, trigger);
   };
+  async function onCreateTriggerNotification() {
+    await notifee.deleteChannel(notification.android?.channelId || 'default');
+    let NowDate = new Date(Date.now());
+    const date = new Date(Date.now());
+    date.setHours(10);
+    date.setMinutes(33);
+    let nowDateHours = NowDate.getHours()
+    let nowDateMinutes = NowDate.getMinutes()
+    let dateHours = date.getHours()
+    let dateMinutes = date.getMinutes()
+    // Create a channel
+    await notifee.createChannel({
+      id: notification.android?.channelId || 'default',
+      name: notification.android?.channelId || 'default',
+      importance: notification.android?.importance || AndroidImportance.DEFAULT,
+      visibility: notification.android?.visibility || AndroidVisibility.PRIVATE,
+      vibration: true,
+      sound: notification.android?.sound || 'default',
+    });
+    const channel = await notifee.getChannel(
+      notification.android?.channelId || 'default',
+    );
+    console.log('notification.channel', channel);
+    /* Change the trigger */
+    const trigger = triggerType();
+      if (nowDateHours = dateHours &&( nowDateMinutes = dateMinutes)) {
+        await notifee.createTriggerNotification( notification,
+          trigger );
+          console.log('Trigger created: ', notification, trigger);
+      }
+    // await notifee.createTriggerNotification( notification,
+    // trigger );
+    // console.log('Trigger created: ', notification, trigger);
+  }
 
   const onAPIPress = async () => {
     /* Change the API function to test */
@@ -84,12 +125,13 @@ export const Content = ({navigation} : any) => {
     <ScrollView>
     <View style={styles.container}>
       <Card>
-        <Card.Title>Séance</Card.Title>
+        <Card.Title>Séance : Relaxation</Card.Title>
         <Card.Divider />
         <Card.FeaturedTitle>Relaxation</Card.FeaturedTitle>
+          <Button title="Create Trigger Notification" onPress={() => onCreateTriggerNotification()} />
         <Button
               color={(Platform.OS === 'ios' && '#fff') || '#44337A'}
-              title={'Display Notification'}
+              title={'Programmer des rappels'}
               onPress={()=>navigation.navigate('dating')}
             />
       </Card>
