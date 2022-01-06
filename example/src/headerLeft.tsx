@@ -26,7 +26,7 @@ const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
       return calcul
   };
 
-  const isCloseToTop= ({layoutMeasurement, contentOffset, contentSize}) => {
+  const isCloseToTop = ({layoutMeasurement, contentOffset, contentSize}) => {
     let blibli = contentOffset.y == 0;
     // console.log(blibli + 'scrolling top');
     return blibli
@@ -35,29 +35,32 @@ const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
   console.log(event.nativeEvent.contentOffset.y-100);
  }
 export const HeaderLeft = ({}) => {
+  const navigation = useNavigation();
   const [y, setY] = useState(window.scrollY);
   let [offset, setOffset]=useState(0);
   let [currentOffset, setCurrentOffset] = useState(0)
   const [direction, setDirection] = useState(true)
-  const onScroll = function(event) {
+  const onScroll = function(event, nativeEvent) {
     setCurrentOffset(event.nativeEvent.contentOffset.y);
     setDirection(currentOffset > offset ? true : false);
     setOffset(currentOffset);
     console.log(direction);
-    if ((direction === false)) {
-            navigation.setOptions({
-              headerShown : defaultFormat,
-            });
-            console.log(direction)
-          }else navigation.setOptions({
-              headerShown : false
-          })
-  };
+    // if ((direction === false)) {
+    //         navigation.setOptions({
+    //           headerShown : defaultFormat,
+    //         });
+    //         console.log(direction)
+    //       }else navigation.setOptions({
+    //           headerShown : false
+    //       })
+          navigation.setOptions({
+              headerShown : (direction === false)   ? defaultFormat :  false
+  });};
     // componentDidMount: function() {
     //     Events.scrollEvent.register('begin', function(to, element) {
     //       console.log('begin', arguments);
     //     });
-    const navigation = useNavigation();
+    
     useEffect(() => {
         navigation.setOptions({
             headerShown: true,
