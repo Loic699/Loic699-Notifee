@@ -1,5 +1,8 @@
+/**
+ * @jest-environment jsdom
+ */
 /* eslint-disable prettier/prettier */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Link, Button, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
@@ -7,7 +10,7 @@ import * as Scroll from 'react-scroll';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { defaultFormat } from 'moment';
-
+window.addEventListener = y => y;
 // let Link      = Scroll.Link;
 // let Button    = Scroll.Button;
 // let Element   = Scroll.Element;
@@ -17,15 +20,39 @@ import { defaultFormat } from 'moment';
 
 const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
     const paddingToBottom = 20;
-    return layoutMeasurement.height + contentOffset.y >=
+    let calcul = layoutMeasurement.height + contentOffset.y >=
       contentSize.height - paddingToBottom;
+      // console.log(calcul)
+      return calcul
   };
 
   const isCloseToTop= ({layoutMeasurement, contentOffset, contentSize}) => {
-    return contentOffset.y == 0;
+    let blibli = contentOffset.y == 0;
+    // console.log(blibli + 'scrolling top');
+    return blibli
  }
-
+ const handleScroll = function(event) {
+  console.log(event.nativeEvent.contentOffset.y-100);
+ }
 export const HeaderLeft = ({}) => {
+  const [y, setY] = useState(window.scrollY);
+  let [offset, setOffset]=useState(0);
+  let [currentOffset, setCurrentOffset] = useState(0)
+  const [direction, setDirection] = useState(true)
+  const onScroll = function(event) {
+    setCurrentOffset(event.nativeEvent.contentOffset.y);
+    setDirection(currentOffset > offset ? true : false);
+    setOffset(currentOffset);
+    console.log(direction);
+    if ((direction === false)) {
+            navigation.setOptions({
+              headerShown : defaultFormat,
+            });
+            console.log(direction)
+          }else navigation.setOptions({
+              headerShown : false
+          })
+  };
     // componentDidMount: function() {
     //     Events.scrollEvent.register('begin', function(to, element) {
     //       console.log('begin', arguments);
@@ -35,26 +62,47 @@ export const HeaderLeft = ({}) => {
         navigation.setOptions({
             headerShown: true,
         })
+       
       }, [navigation]);
-    window.onscroll = function() {
-        console.log('scrolling');
-    };
-    
+   
+      // useEffect(() => {
+      //   setY(window.scrollY);
+      // }, [y]);
+      
+      // useEffect(() => {
+      //   const handleNavigation = (e) => {
+      //     const window = e.currentTarget;
+      //     if (y > window.scrollY) {
+      //       console.log("scrolling up");
+      //     } else if (y < window.scrollY) {
+      //       console.log("scrolling down");
+      //     }
+      //     setY(window.scrollY);
+      //   };
+      //   window.addEventListener("scroll", (e) => handleNavigation(e));
+      
+      //   return () => { // return a cleanup function to unregister our function since its gonna run multiple times
+      //     window.removeEventListener("scroll", (e) => handleNavigation(e));
+      //   };
+      // }, [y]);
 
     return (
         <ScrollView
-        onScroll={({nativeEvent}) => {
-            if (isCloseToTop(nativeEvent)) {
-              navigation.setOptions({
-                headerShown : defaultFormat,
-              });
-            }else navigation.setOptions({
-                headerShown : false
-            })
-          }}
-        //   scrollEventThrottle={400}
-        // onScroll={()=>console.log('BLIVLI')}
-        // style={{marginTop:getStatusBarHeight()}}
+        // onScroll={({nativeEvent}) => {
+        //     if ((direction === false)) {
+        //       navigation.setOptions({
+        //         headerShown : defaultFormat,
+        //       });
+        //       console.log(direction)
+        //     }else navigation.setOptions({
+        //         headerShown : false
+        //     })
+        //   }}
+        // onScroll={({nativeEvent}) =>{
+        //   navigation.setOptions({
+        //   headerShown : (isCloseToTop(nativeEvent) || (direction == false) )  ? defaultFormat :  false 
+        // }); console.log(offset);}}
+        onScroll={onScroll}
         >
             <SafeAreaView>
         <Text>
