@@ -44,7 +44,7 @@ export const HeaderLeft = ({}) => {
     setCurrentOffset(event.nativeEvent.contentOffset.y);
     setDirection(currentOffset > offset ? true : false);
     setOffset(currentOffset);
-    console.log(direction);
+    // console.log(direction);
     // if ((direction === false)) {
     //         navigation.setOptions({
     //           headerShown : defaultFormat,
